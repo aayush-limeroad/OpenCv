@@ -52,7 +52,7 @@ def sharpen_all():
                 list.insert(1,t)
                 t.start()
                 
-                sharpen_one(lines,index)
+                # sharpen_one(lines,index)
                 
             
             index=index+1
