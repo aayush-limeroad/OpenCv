@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 import requests
 import cv2
 import urllib.request
@@ -31,7 +32,8 @@ def sharpen_one(lines,index):
                 
     # output_loc="/media/aayush/3236805D368023C7/Users/aayus/Desktop/Work/Computer Vision/output"
     cv2.imwrite("./Computer Vision/output/image-{}.jpg".format(index),im)
-    # time.sleep(0.2)
+    # time.sleep(0.1)
+    return f"image-{index}"
     
     
 def sharpen_all():
@@ -45,38 +47,33 @@ def sharpen_all():
         
         index=0
         list=[]
+        pool=ThreadPoolExecutor(5)
         for lines in csvFile:
            
             if(index>3):
-                t=threading.Thread(target=sharpen_one,args=(lines,index))
-                list.insert(1,t)
-                t.start()
                 
-                # sharpen_one(lines,index)
+                list.insert(1,pool.submit(sharpen_one,lines,index))
+                
+                # t=threading.Thread(target=sharpen_one,args=(lines,index))
+                # list.insert(1,t)
+                # t.start()
+                
+                
                 
             
             index=index+1
             
             
-            if(index==15):
+            if(index==100):
                 break 
         
+        print(threading.active_count())
         for i in list:
-            i.join()
+            print(i.result())
 
 start=time.perf_counter()
 
 sharpen_all()
-
-# list=[]
-# for i in range(15):
-#    list.insert(1,threading.Thread(target=sharpen_image))
-   
-# for i in list:
-#     i.start()
-
-# for i in list:
-#     i.join()
 
 end=time.perf_counter()
 print(f"Finished in {round(end-start,2)} seconds")
