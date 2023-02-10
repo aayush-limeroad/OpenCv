@@ -57,13 +57,8 @@ def sharpen_all():
                 # t=threading.Thread(target=sharpen_one,args=(lines,index))
                 # list.insert(1,t)
                 # t.start()
-                
-                
-                
             
             index=index+1
-            
-            
             if(index==100):
                 break 
         
